@@ -22,3 +22,4 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 angler_blockchain-*.tar
 
+/.elixir_ls/

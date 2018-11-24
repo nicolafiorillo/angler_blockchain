@@ -9,7 +9,7 @@ defmodule AnglerBlockchain.Application do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: AnglerBlockchain.Worker.start_link(arg)
-      # {AnglerBlockchain.Worker, arg},
+      {AnglerBlockchain.Blockchain, []},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
