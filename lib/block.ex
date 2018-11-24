@@ -4,7 +4,7 @@ defmodule AnglerBlockchain.Block do
 
   defstruct index: nil, timestamp: nil, proof: nil, prev_hash: nil
 
-  @spec create(Int.t(), String.t(), String.t()) :: Map.t()
+  @spec create(number(), number(), binary()) :: Map.t()
   def create(index, proof, prev_hash) do
     %__MODULE__{
       index: index,

@@ -16,7 +16,7 @@ defmodule AnglerBlockchain.Blockchain do
   @spec init(any()) :: {:ok, any()}
   def init(state) do
     next_index = length(state.chain) + 1
-    genesis_block = AnglerBlockchain.Block.create(next_index, "", "00")
+    genesis_block = AnglerBlockchain.Block.create(next_index, 1, "0")
     state = %{state | chain: [genesis_block | state.chain]}
 
     {:ok, state}
@@ -24,16 +24,21 @@ defmodule AnglerBlockchain.Blockchain do
 
   # API
 
-  @spec get_chain() :: list()
-  def get_chain() do
-   GenServer.call(__MODULE__, :get_chain)
-  end
+  @spec chain() :: list()
+  def chain(), do: GenServer.call(__MODULE__, :chain)
+
+  @spec last_block() :: map()
+  def last_block(), do: GenServer.call(__MODULE__, :last_block)
 
   # Callbacks
 
-  def handle_call(:get_chain, _from, %{chain: chain} = state) do
+  def handle_call(:chain, _from, %{chain: chain} = state) do
    {:reply, chain, state}
   end
+
+  def handle_call(:last_block, _from, %{chain: chain} = state) do
+    {:reply, List.last(chain), state}
+   end
 
   #def handle_cast({:bar, [value]}, state) do
   #  {:noreply, state}
