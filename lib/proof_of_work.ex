@@ -1,5 +1,4 @@
 defmodule AnglerBlockchain.ProofOfWork do
-
   @leading_hash <<0, 0>>
   @start_nonce 1
 
@@ -35,6 +34,7 @@ defmodule AnglerBlockchain.ProofOfWork do
 
   @spec mine(Block.t(), binary(), number()) :: Block.t()
   def mine(block, @leading_hash <> _, _nonce), do: block
+
   def mine(block, _hash, nonce) do
     block = %{block | nonce: nonce}
     hash = calc_hash(block)
@@ -47,9 +47,10 @@ defmodule AnglerBlockchain.ProofOfWork do
   def block_is_coherent?(block, nil) do
     block |> calc_hash() |> mined_hash?()
   end
+
   def block_is_coherent?(block, next_block) do
     hash = block |> calc_hash()
-    (Base.encode16(hash) == next_block.previous_hash) and mined_hash?(hash)
+    Base.encode16(hash) == next_block.previous_hash and mined_hash?(hash)
   end
 
   defp calc_hash(block), do: :crypto.hash(:sha256, block |> Poison.encode!())

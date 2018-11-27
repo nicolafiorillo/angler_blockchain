@@ -18,9 +18,9 @@ defmodule AnglerBlockchain.Blockchain do
 
   @spec init(any()) :: {:ok, any()}
   def init(state) do
-    Logger.info "Initializing blockchain: mining genesis block."
+    Logger.info("Initializing blockchain: mining genesis block.")
     genesis_block = ProofOfWork.create_genesis_block(state.chain)
-    Logger.info "Mined genesis block on chain."
+    Logger.info("Mined genesis block on chain.")
 
     {:ok, %{state | chain: [genesis_block | state.chain]}}
   end
@@ -42,31 +42,36 @@ defmodule AnglerBlockchain.Blockchain do
   # Callbacks
 
   def handle_call(:chain, _from, %{chain: chain} = state), do: {:reply, chain, state}
-  def handle_call(:last_block, _from, %{chain: chain} = state), do: {:reply, List.last(chain), state}
+
+  def handle_call(:last_block, _from, %{chain: chain} = state),
+    do: {:reply, List.last(chain), state}
+
   def handle_call(:verify_chain, _from, %{chain: chain} = state) do
     {:reply, chain_is_coherent?(nil, chain |> Enum.reverse()), state}
   end
 
   def handle_cast(:mine_block, %{chain: chain} = state) do
-    Logger.info "Mining new block."
+    Logger.info("Mining new block.")
     new_block = ProofOfWork.mine_new_block(chain)
-    Logger.info "New mined block on chain."
+    Logger.info("New mined block on chain.")
     {:noreply, %{state | chain: [new_block | chain]}}
   end
 
-  #def handle_info({:baz, [value]}, state) do
+  # def handle_info({:baz, [value]}, state) do
   #  {:noreply, state}
-  #end
+  # end
 
   # Helpers
 
   defp chain_is_coherent?(nil, []), do: true
   defp chain_is_coherent?(nil, [block | tail]), do: chain_is_coherent?(block, tail)
+
   defp chain_is_coherent?(block, [next_block | tail]) do
     case ProofOfWork.block_is_coherent?(block, next_block) do
-      true  -> chain_is_coherent?(next_block, tail)
-      _     -> false
+      true -> chain_is_coherent?(next_block, tail)
+      _ -> false
     end
   end
+
   defp chain_is_coherent?(block, []), do: ProofOfWork.block_is_coherent?(block, nil)
 end

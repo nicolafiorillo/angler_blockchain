@@ -1,5 +1,4 @@
 defmodule AnglerBlockchain.Block do
-
   alias AnglerBlockchain.AbTime
 
   defstruct index: nil, timestamp: nil, nonce: 0, previous_hash: nil
