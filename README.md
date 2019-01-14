@@ -11,7 +11,7 @@ iex -S mix
 ```
 
 ### Roadmap
-With no particular order:
+The Angler Blockchain is a work in progress. An incomplete list of functionalities with no particular order:
 
 - [] Technology layer
   - [x] Raw blockchain
